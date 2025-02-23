@@ -50,22 +50,43 @@ class RopeLink:
 			point_B.current_position -= dir * difference * .5 * stiffness
 
 ## Controls the stiffness of the rope. Lower values make the rope more elastic.
-@export_range(0,1) var rope_stiffness:float = 1
+@export_range(0,1) var rope_stiffness:float = 1:
+	set(new_value):
+		rope_stiffness = new_value
+		simulation_running = false
 ## Controls the impact and direction of gravity.
-@export var gravity_strength:= Vector3(0,-20,0)
+@export var gravity_strength:= Vector3(0,-20,0):
+	set(new_value):
+		gravity_strength = new_value
+		simulation_running = false
 ## Controls the speed damping, simulating air resistance.
-@export_range(0,10) var speed_damping:float = .2 
+@export_range(0,10,.01) var speed_damping:float = .2:
+	set(new_value):
+		speed_damping = new_value
+		simulation_running = false
 ## Controls the number of points simulating the rope. 
 ## [br][b]Note:[/b]
 ## This parameter [b] significantly impacts performance.[/b]
-@export_range(0,50) var nbr_point:int = 20
+@export_range(2,30,.1) var nbr_point:int = 20:
+	set(new_value):
+		nbr_point = new_value
+		simulation_running = false
 ## Controls the theoretical length of the rope, based on the distance between the start and end points.
 ## The actual length is influenced by rope stiffness and gravity strength.
-@export_range(0,2,.01,"or_greater") var rope_length_ratio:float = .7
+@export_range(0.5,2,.005,"or_greater","or_less") var rope_length_ratio:float = .7:
+	set(new_value):
+		rope_length_ratio = new_value
+		simulation_running = false
 ## Defines the starting position of the rope, which is fixed.
-@export var start_pos:= Vector3.ONE
+@export var start_pos:= Vector3.ONE:
+	set(new_value):
+		start_pos = new_value
+		simulation_running = false
 ## Defines the ending position of the rope, which is fixed.
-@export var end_pos:= Vector3.ZERO
+@export var end_pos:= Vector3.ZERO:
+	set(new_value):
+		end_pos = new_value
+		simulation_running = false
 
 ## Optional node for applying wind impact to the rope. 
 ##[br][b]Note:[/b]
@@ -78,24 +99,24 @@ class RopeLink:
 ## Controls the number of calls per second. A low value will make the rope feel rigid and stuttery.
 ## [br][b]Note:[/b]
 ## This parameter [b] significantly impacts performance.[/b]
-@export_range(10,60,1,"or_greater","or_less") var call_frequency:float = 20
+@export_range(10,60,.1,"or_greater","or_less") var call_frequency:float = 20
 ## Controls the simulation's precision.
 ## [br][b]Note:[/b]
 ## This parameter [b] significantly impacts performance.[/b]
-@export var nbr_link_pass:int = 3
+@export_range(1,20,.1) var nbr_link_pass:int = 3
 
 var distance:float
 var points:Array[RopePoint]
 var links:Array[RopeLink]
 var new_delta:float
-
-#The length of the rope compared to the distance from A to B
 var line := MeshInstance3D.new()
-var run_simulation:bool = false
+var simulation_running:bool = false
 
-func _init(new_start_pos:=Vector3.ZERO,new_end_pos:=Vector3.ZERO,new_wind_processor:Node=null,
-		new_wind_impact:float=2,new_speed_damping:float=.2, new_rope_length_ratio:float=.7,
-		new_rope_stiffness:float=1,new_gravity_strength:= Vector3(0,-20,0),new_nbr_point:int = 20) -> void:
+func _init(new_start_pos:Vector3=start_pos,new_end_pos:Vector3=end_pos,
+		new_wind_processor:Node=wind_processor,new_wind_impact:float=wind_impact,
+		new_speed_damping:float=speed_damping, new_rope_length_ratio:float=rope_length_ratio,
+		new_rope_stiffness:float=rope_stiffness,new_gravity_strength:Vector3= gravity_strength,
+		new_nbr_point:int = nbr_point) -> void:
 	
 	start_pos = new_start_pos
 	end_pos = new_end_pos
@@ -108,12 +129,21 @@ func _init(new_start_pos:=Vector3.ZERO,new_end_pos:=Vector3.ZERO,new_wind_proces
 	rope_length_ratio = new_rope_length_ratio
 	add_child(line)
 
+func clear_rope() -> void:
+	for elt:RopePoint in points:
+		elt = null 
+	for elt:RopeLink in links:
+		elt = null 
+	points.clear()
+	links.clear()
+
+
 func _physics_process(delta:float) -> void :
 	new_delta += delta
-	if start_pos != end_pos and not run_simulation:
+	if start_pos != end_pos and not simulation_running:
 		initiate_rope()
 		line = draw_multi_line(points,line)
-	elif run_simulation and new_delta> 1/call_frequency:
+	elif simulation_running and new_delta> 1/call_frequency:
 		update_rope_variables()
 		for i in range(points.size()):
 			if is_instance_valid(wind_processor):
@@ -130,7 +160,8 @@ func _physics_process(delta:float) -> void :
 		line = draw_multi_line(points,line)
 
 func initiate_rope() -> void:
-	run_simulation = true
+	clear_rope()
+	simulation_running = true
 	distance = start_pos.distance_to(end_pos)
 	var dir:Vector3 = start_pos.direction_to(end_pos)
 	var pt_A:RopePoint
