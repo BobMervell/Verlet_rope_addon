@@ -5,13 +5,21 @@ A 3D rope simulation addon for Godot, using Verlet integration for smooth, physi
 # ✨ Features:
 
 ✔️ Customizable Rope Stiffness – Adjust how elastic or rigid the rope behaves.
+
 ✔️ Gravity Control – Set the direction and intensity of gravitational force on the rope.
+
 ✔️ Air Resistance (Damping) – Simulates air resistance for a more natural motion.
+
 ✔️ Variable Rope Length – Define the theoretical length while physics affects the actual stretch.
+
 ✔️ Adjustable Rope Density – Control the number of simulation points (affects performance).
+
 ✔️ Fixed Start & End Points – Set anchor positions for the rope.
+
 ✔️ Simulation Precision Control – Fine-tune link iterations for better accuracy.
+
 ✔️ Performance Adjustments – Optimize call frequency and simulation steps for smooth gameplay.
+
 ✔️ Wind Support – Possibility to pair with a wind processing node to apply dynamic wind forces to affect rope movement.
 
 # 📦 Installation:
