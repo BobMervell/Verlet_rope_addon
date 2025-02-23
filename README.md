@@ -2,6 +2,8 @@
 
 A 3D rope simulation addon for Godot, using Verlet integration for smooth, physics-based movement. This addon is highly customizable, allowing you to tweak stiffness, gravity, wind effects, and more for realistic rope behavior. 
 
+![alt text](https://github.com/LucasROUZE/Verlet_rope_addon/blob/main/Rope_screenshot.png)
+
 # ✨ Features:
 
 ✔️ Customizable Rope Stiffness – Adjust how elastic or rigid the rope behaves.
