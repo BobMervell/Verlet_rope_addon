@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://chaa4jfiwk18o"]
+
+[ext_resource type="Script" path="res://addons/verlet_rope/rope_simulation.gd" id="1_nnlvn"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Rope3D2" type="Node3D" parent="."]
+script = ExtResource("1_nnlvn")
