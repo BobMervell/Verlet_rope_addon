@@ -6,7 +6,3 @@
 
 [node name="Rope3D" type="Node3D" parent="."]
 script = ExtResource("1_jvnw5")
-speed_damping = 0.0
-nbr_point = 0
-call_frequency = 10.0
-nbr_link_pass = 6
