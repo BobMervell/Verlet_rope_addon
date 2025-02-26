@@ -61,7 +61,7 @@ If you want to instantiate a rope node directly in script you can use Rope3d.new
 
 ## 📝 License:
 
-This project is licensed under the, you can use and modify it except for commercial uses
+This project is licensed under theCC BY-NC 4.0 , you can use and modify it except for commercial uses, credit is needed.
 
 ## 🌟 Support:
 
