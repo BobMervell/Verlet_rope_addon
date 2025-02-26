@@ -18,7 +18,7 @@ class RopePoint:
 	var wind_force:= Vector3.ZERO
 	
 	func update_wind_force(new_wind:Vector3,wind_impact:float) -> void:
-		wind_force = new_wind * wind_impact
+		wind_force = new_wind.normalized() * wind_impact * 100
 
 	func update_point(delta:float) -> void:
 		if not locked:
