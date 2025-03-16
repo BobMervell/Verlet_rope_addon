@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://u4kwwd8i1f5b"]
 
-[ext_resource type="Script" path="res://addons/verlet_rope/rope_simulation.gd" id="1_jvnw5"]
+[ext_resource type="Script" uid="uid://78d1mtqsempx" path="res://addons/verlet_rope/rope_simulation.gd" id="1_jvnw5"]
 
 [node name="Node" type="Node"]
 
