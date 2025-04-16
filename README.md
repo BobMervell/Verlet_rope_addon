@@ -1,6 +1,6 @@
 # Godot Rope Addon
 
-A 3D rope simulation addon for Godot, using Verlet integration for smooth, physics-based movement. This addon is highly customizable, allowing you to tweak stiffness, gravity, wind effects, and more for realistic rope behavior. 
+A 3D rope simulation addon for Godot, using Verlet integration for smooth, physics-based movement. This addon is highly customizable, allowing you to tweak stiffness, gravity, wind effects, and more for realistic rope behavior.
 
 
 ![](https://github.com/BobMervell/Verlet_rope_addon/blob/main/images/Rope_animation.gif)
@@ -32,9 +32,9 @@ A 3D rope simulation addon for Godot, using Verlet integration for smooth, physi
 3. **Enable the Plugin:**
 
 	Open Godot Editor.
-   
+
 	Go to Project > Project Settings > Plugins.
-   
+
 	Enable Verlet Rope Addon.
 
 **Note:** You only need to place the verlet_rope folder in "res://addons/" in your godot app.
@@ -43,7 +43,7 @@ A 3D rope simulation addon for Godot, using Verlet integration for smooth, physi
 ## Adding a Rope to Your Scene
 Create a New Rope
 
-- Add a Rope3D node to your scene ![alt text](https://github.com/LucasROUZE/Verlet_rope_addon/blob/main/addons/verlet_rope/rope_icon.png) 
+- Add a Rope3D node to your scene ![alt text](https://github.com/LucasROUZE/Verlet_rope_addon/blob/main/addons/verlet_rope/rope_icon.png)
 
 - Modify properties directly in the Inspector to tweak behavior.
 
@@ -53,7 +53,7 @@ To use wind, set a wind processor node that implements this function:
 
 	  func get_wind_strength(position: Vector3) -> Vector3:
 		  return wind_strength_at_position
-		  
+
 To add wind support for the rope you need to set the **wind processor** property with your wind node.
 
 ## In script instantation:

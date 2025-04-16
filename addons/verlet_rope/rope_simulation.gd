@@ -5,7 +5,7 @@ class_name Rope3D
 ## A node used to simulate a rope physics system with adjustable parameters.
 ## The node also supports control over the simulation's precision and performance.
 ## [br][b]Note:[/b]
-## Use a dedicated wind_processor to integrate wind effects. 
+## Use a dedicated wind_processor to integrate wind effects.
 
 
 class RopePoint:
@@ -16,7 +16,7 @@ class RopePoint:
 	var locked:bool = false
 	var additional_forces:= Vector3.ZERO
 	var wind_force:= Vector3.ZERO
-	
+
 	func update_wind_force(new_wind:Vector3,wind_impact:float) -> void:
 		wind_force = new_wind.normalized() * wind_impact * 100
 
@@ -64,7 +64,7 @@ class RopeLink:
 	set(new_value):
 		speed_damping = new_value
 		simulation_running = false
-## Controls the number of points simulating the rope. 
+## Controls the number of points simulating the rope.
 ## [br][b]Note:[/b]
 ## This parameter [b] significantly impacts performance.[/b]
 @export_range(2,30,.1) var nbr_point:int = 20:
@@ -81,14 +81,12 @@ class RopeLink:
 @export var start_pos:= Vector3.ONE:
 	set(new_value):
 		start_pos = new_value
-		simulation_running = false
 ## Defines the ending position of the rope, which is fixed.
 @export var end_pos:= Vector3.ZERO:
 	set(new_value):
 		end_pos = new_value
-		simulation_running = false
 
-## Optional node for applying wind impact to the rope. 
+## Optional node for applying wind impact to the rope.
 ##[br][b]Note:[/b]
 ## The node [b] must include[/b] the following function:
 ## [br][code]func get_wind_strength(position: Vector3) -> Vector3: [/code]
@@ -117,7 +115,7 @@ func _init(new_start_pos:Vector3=start_pos,new_end_pos:Vector3=end_pos,
 		new_speed_damping:float=speed_damping, new_rope_length_ratio:float=rope_length_ratio,
 		new_rope_stiffness:float=rope_stiffness,new_gravity_strength:Vector3= gravity_strength,
 		new_nbr_point:int = nbr_point) -> void:
-	
+
 	start_pos = new_start_pos
 	end_pos = new_end_pos
 	speed_damping = new_speed_damping
@@ -131,9 +129,9 @@ func _init(new_start_pos:Vector3=start_pos,new_end_pos:Vector3=end_pos,
 
 func clear_rope() -> void:
 	for elt:RopePoint in points:
-		elt = null 
+		elt = null
 	for elt:RopeLink in links:
-		elt = null 
+		elt = null
 	points.clear()
 	links.clear()
 
@@ -166,17 +164,17 @@ func initiate_rope() -> void:
 	var dir:Vector3 = start_pos.direction_to(end_pos)
 	var pt_A:RopePoint
 	var pt_B:RopePoint
-	
+
 	pt_A = add_point(start_pos,true)
 	points.append(pt_A)
-	
+
 	for i in range(1,nbr_point-1):
 		var new_pos:Vector3 = start_pos + dir * distance * rope_length_ratio * i/nbr_point
 		pt_B = add_point(new_pos,false)
 		points.append(pt_B)
 		links.append(add_link(pt_A,pt_B))
 		pt_A = pt_B
-	
+
 	pt_B = add_point(end_pos,true)
 	links.append(add_link(pt_A,pt_B))
 	points.append(pt_B)
