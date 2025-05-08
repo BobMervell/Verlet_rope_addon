@@ -10,12 +10,12 @@ class_name Rope3D
 
 class RopePoint:
 	var current_position:Vector3
-	var previous_position:= Vector3.ZERO
+	var previous_position:Vector3= Vector3.ZERO
 	var gravity_strength:Vector3
 	var speed_damping:float
 	var locked:bool = false
-	var additional_forces:= Vector3.ZERO
-	var wind_force:= Vector3.ZERO
+	var additional_forces:Vector3= Vector3.ZERO
+	var wind_force:Vector3= Vector3.ZERO
 
 	func update_wind_force(new_wind:Vector3,wind_impact:float) -> void:
 		wind_force = new_wind.normalized() * wind_impact * 100
@@ -34,8 +34,8 @@ class RopeLink:
 	var point_B:RopePoint
 	var length:float
 	var stiffness:float
-	const root_approxi=0.45
-	const approxi = 0.2
+	const root_approxi:float = 0.45
+	const approxi:float = 0.2
 
 	func update_link() -> void:
 		var dir:Vector3 = point_B.current_position - point_A.current_position
@@ -55,7 +55,7 @@ class RopeLink:
 		rope_stiffness = new_value
 		simulation_running = false
 ## Controls the impact and direction of gravity.
-@export var gravity_strength:= Vector3(0,-20,0):
+@export var gravity_strength:Vector3= Vector3(0,-20,0):
 	set(new_value):
 		gravity_strength = new_value
 		simulation_running = false
@@ -78,11 +78,11 @@ class RopeLink:
 		rope_length_ratio = new_value
 		simulation_running = false
 ## Defines the starting position of the rope, which is fixed.
-@export var start_pos:= Vector3.ONE:
+@export var start_pos:Vector3= Vector3.ONE:
 	set(new_value):
 		start_pos = new_value
 ## Defines the ending position of the rope, which is fixed.
-@export var end_pos:= Vector3.ZERO:
+@export var end_pos:Vector3= Vector3.ZERO:
 	set(new_value):
 		end_pos = new_value
 
@@ -107,7 +107,7 @@ var distance:float
 var points:Array[RopePoint]
 var links:Array[RopeLink]
 var new_delta:float
-var line := MeshInstance3D.new()
+var line:MeshInstance3D = MeshInstance3D.new()
 var simulation_running:bool = false
 
 func _init(new_start_pos:Vector3=start_pos,new_end_pos:Vector3=end_pos,
@@ -143,15 +143,15 @@ func _physics_process(delta:float) -> void :
 		line = draw_multi_line(points,line)
 	elif simulation_running and new_delta> 1/call_frequency:
 		update_rope_variables()
-		for i in range(points.size()):
+		for i:int in range(points.size()):
 			if is_instance_valid(wind_processor):
 				@warning_ignore("unsafe_method_access")
 				var wind_force:Vector3 = wind_processor.get_wind_strength(points[i].current_position)
 				points[i].update_wind_force(wind_force,wind_impact)
 			update_point_variables(points[i])
 			points[i].update_point(delta)
-		for i in range(0,nbr_link_pass):
-			for link in links:
+		for i:int in range(0,nbr_link_pass):
+			for link:RopeLink in links:
 				update_link_variables(link)
 				link.update_link()
 		new_delta = 0
@@ -168,7 +168,7 @@ func initiate_rope() -> void:
 	pt_A = add_point(start_pos,true)
 	points.append(pt_A)
 
-	for i in range(1,nbr_point-1):
+	for i:int in range(1,nbr_point-1):
 		var new_pos:Vector3 = start_pos + dir * distance * rope_length_ratio * i/nbr_point
 		pt_B = add_point(new_pos,false)
 		points.append(pt_B)
@@ -196,18 +196,18 @@ func add_link(point_a:RopePoint,point_b:RopePoint) -> RopeLink:
 	link.stiffness = rope_stiffness
 	return link
 
-func draw_multi_line(line_points:Array[RopePoint],old_mesh:MeshInstance3D, color:=Color.BLACK, ) -> MeshInstance3D:
+func draw_multi_line(line_points:Array[RopePoint],old_mesh:MeshInstance3D, color:Color=Color.BLACK, ) -> MeshInstance3D:
 	if not line_points.size() > 0:
 		return old_mesh
-	var immediate_mesh := ImmediateMesh.new()
-	var material := ORMMaterial3D.new()
+	var immediate_mesh:ImmediateMesh = ImmediateMesh.new()
+	var material:ORMMaterial3D = ORMMaterial3D.new()
 
 	old_mesh.mesh = immediate_mesh
 	old_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 
 	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
 	immediate_mesh.surface_add_vertex(line_points[0].current_position)
-	for i in range(1,line_points.size()-1):
+	for i:int in range(1,line_points.size()-1):
 		immediate_mesh.surface_add_vertex(line_points[i].current_position)
 		immediate_mesh.surface_add_vertex(line_points[i].current_position)
 	immediate_mesh.surface_add_vertex(line_points[-1].current_position)
